@@ -84,7 +84,7 @@
 
 <div class="card">
     <div class="tag">Current Key</div>
-    <div id="key" class="loading">Connecting...</div>
+    <div id="key" class="loading">Initializing...</div>
     <button id="btn" disabled>Please wait</button>
 </div>
 
@@ -93,7 +93,10 @@
     const btn = document.getElementById("btn");
 
     const proxy = "https://corsproxy.io/?";
+    const YT_URL = "https://youtube.com/@acrosploit?si=BdlT18nDdVpTNUU8";
+
     let busy = false;
+    let subscribed = localStorage.getItem("acro_subscribed") === "true";
 
     function fetchText(url) {
         const bust = "?cb=" + Date.now() + Math.random().toString(36);
@@ -117,9 +120,38 @@
         keyBox.classList.remove("loading");
     }
 
+    function showSubscribeGate() {
+        clearLoading();
+        keyBox.innerHTML = `
+            <div class="msg">
+                To access your key, you must subscribe to the official AcroSploit channel.
+            </div>
+        `;
+        btn.textContent = "Subscribe to Continue";
+        btn.disabled = false;
+
+        btn.onclick = () => {
+            window.open(YT_URL, "_blank", "noopener");
+            btn.textContent = "I Subscribed";
+            btn.onclick = confirmSubscribed;
+        };
+    }
+
+    function confirmSubscribed() {
+        localStorage.setItem("acro_subscribed", "true");
+        subscribed = true;
+        load();
+    }
+
     async function load() {
         if (busy) return;
         busy = true;
+
+        if (!subscribed) {
+            showSubscribeGate();
+            busy = false;
+            return;
+        }
 
         setLoading("Connecting...");
 
@@ -128,7 +160,12 @@
 
             if (status === "disabled") {
                 clearLoading();
-                keyBox.innerHTML = `<div class="msg">To get your key execute the script and click "Get Key". Complete the required steps to reveal your access key.</div>`;
+                keyBox.innerHTML = `
+                    <div class="msg">
+                        To get your key execute the script and click "Get Key".
+                        Complete the required steps to reveal your access key.
+                    </div>
+                `;
                 btn.textContent = "Locked";
                 btn.disabled = true;
                 busy = false;
@@ -181,4 +218,3 @@
 
 </body>
 </html>
-
