@@ -84,8 +84,8 @@
 
 <div class="card">
     <div class="tag">Current Key</div>
-    <div id="key" class="loading">Initializing...</div>
-    <button id="btn" disabled>Please wait</button>
+    <div id="key">Subscribe Required</div>
+    <button id="btn">Subscribe to Continue</button>
 </div>
 
 <script>
@@ -96,7 +96,7 @@
     const YT_URL = "https://youtube.com/@acrosploit?si=BdlT18nDdVpTNUU8";
 
     let busy = false;
-    let subscribed = localStorage.getItem("acro_subscribed") === "true";
+    let verified = false;
 
     function fetchText(url) {
         const bust = "?cb=" + Date.now() + Math.random().toString(36);
@@ -121,37 +121,28 @@
     }
 
     function showSubscribeGate() {
-        clearLoading();
         keyBox.innerHTML = `
             <div class="msg">
                 To access your key, you must subscribe to the official AcroSploit channel.
             </div>
         `;
+
         btn.textContent = "Subscribe to Continue";
         btn.disabled = false;
 
         btn.onclick = () => {
             window.open(YT_URL, "_blank", "noopener");
             btn.textContent = "I Subscribed";
-            btn.onclick = confirmSubscribed;
+            btn.onclick = () => {
+                verified = true;
+                loadKey();
+            };
         };
     }
 
-    function confirmSubscribed() {
-        localStorage.setItem("acro_subscribed", "true");
-        subscribed = true;
-        load();
-    }
-
-    async function load() {
-        if (busy) return;
+    async function loadKey() {
+        if (busy || !verified) return;
         busy = true;
-
-        if (!subscribed) {
-            showSubscribeGate();
-            busy = false;
-            return;
-        }
 
         setLoading("Connecting...");
 
@@ -162,8 +153,7 @@
                 clearLoading();
                 keyBox.innerHTML = `
                     <div class="msg">
-                        To get your key execute the script and click "Get Key".
-                        Complete the required steps to reveal your access key.
+                        Execute the script and click "Get Key" to unlock access.
                     </div>
                 `;
                 btn.textContent = "Locked";
@@ -208,12 +198,12 @@
             keyBox.textContent = "Connection Failed";
             btn.textContent = "Retry";
             btn.disabled = false;
-            btn.onclick = () => load();
+            btn.onclick = showSubscribeGate;
             busy = false;
         }
     }
 
-    load();
+    showSubscribeGate();
 </script>
 
 </body>
