@@ -95,18 +95,34 @@
     const proxy = "https://corsproxy.io/?";
     const YT_URL = "https://youtube.com/@acrosploit?si=BdlT18nDdVpTNUU8";
 
+    const STATUS_URL = "https://pastebin.com/raw/BpcbtQmc";
+    const KEY_URL = "https://pastebin.com/raw/yG4r13Yd";
+
     let busy = false;
     let verified = false;
 
-    function fetchText(url) {
-        const bust = "?cb=" + Date.now() + Math.random().toString(36);
-        return fetch(proxy + encodeURIComponent(url) + bust)
-            .then(r => r.text())
-            .then(t => {
-                t = t.trim();
-                if (!t || t.startsWith("<!DOCTYPE") || t.includes("<html")) throw 0;
-                return t;
-            });
+    function buildURL(url) {
+        const sep = url.includes("?") ? "&" : "?";
+        return proxy + encodeURIComponent(url + sep + "cb=" + Date.now());
+    }
+
+    async function fetchText(url, retries = 2) {
+        try {
+            const res = await fetch(buildURL(url), { cache: "no-store" });
+            const text = (await res.text()).trim();
+
+            if (!text || text.startsWith("<!DOCTYPE") || text.includes("<html")) {
+                throw 0;
+            }
+
+            return text;
+        } catch {
+            if (retries > 0) {
+                await new Promise(r => setTimeout(r, 400));
+                return fetchText(url, retries - 1);
+            }
+            throw 0;
+        }
     }
 
     function setLoading(text) {
@@ -147,7 +163,7 @@
         setLoading("Connecting...");
 
         try {
-            const status = (await fetchText("https://pastebin.com/raw/BpcbtQmc")).toLowerCase();
+            const status = (await fetchText(STATUS_URL)).toLowerCase();
 
             if (status === "disabled") {
                 clearLoading();
@@ -162,7 +178,7 @@
                 return;
             }
 
-            const raw = await fetchText("https://pastebin.com/raw/yG4r13Yd");
+            const raw = await fetchText(KEY_URL);
             const key = raw.replace(/KEY:\s*/i, "").trim();
 
             clearLoading();
@@ -198,7 +214,7 @@
             keyBox.textContent = "Connection Failed";
             btn.textContent = "Retry";
             btn.disabled = false;
-            btn.onclick = showSubscribeGate;
+            btn.onclick = loadKey;
             busy = false;
         }
     }
