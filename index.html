@@ -2,286 +2,217 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Access Key</title>
 
 <style>
 body{
-    background:#050505 radial-gradient(circle at center,#111 0%,#000 100%);
-    color:#fff;
-    font-family:Inter,system-ui,sans-serif;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    height:100vh;
-    margin:0
+background:#050505 radial-gradient(circle at center,#111 0%,#000 100%);
+color:#fff;
+font-family:Inter,system-ui,sans-serif;
+display:flex;
+align-items:center;
+justify-content:center;
+height:100vh;
+margin:0
 }
 .card{
-    background:rgba(255,255,255,.03);
-    backdrop-filter:blur(12px);
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:15px;
-    padding:28px;
-    width:360px;
-    text-align:center
+background:rgba(255,255,255,.03);
+backdrop-filter:blur(12px);
+border:1px solid rgba(255,255,255,.1);
+border-radius:15px;
+padding:28px;
+width:360px;
+text-align:center
 }
 .tabs{
-    display:flex;
-    gap:6px;
-    margin-bottom:18px
+display:flex;
+gap:6px;
+margin-bottom:18px
 }
 .tab{
-    flex:1;
-    padding:10px;
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:1px;
-    text-transform:uppercase;
-    border-radius:8px;
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.1);
-    cursor:pointer;
-    color:#aaa
+flex:1;
+padding:10px;
+font-size:11px;
+font-weight:700;
+letter-spacing:1px;
+text-transform:uppercase;
+border-radius:8px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.1);
+cursor:pointer;
+color:#aaa
 }
 .tab.active{
-    background:#fff;
-    color:#000
+background:#fff;
+color:#000
 }
 .tag{
-    font-size:10px;
-    letter-spacing:2px;
-    color:#444;
-    margin-bottom:12px;
-    text-transform:uppercase
+font-size:10px;
+letter-spacing:2px;
+color:#444;
+margin-bottom:12px;
+text-transform:uppercase
 }
-#key,#scriptBox{
-    font-size:22px;
-    font-weight:800;
-    min-height:48px;
-    margin-bottom:20px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    gap:10px
-}
-.msg{
-    font-size:13px;
-    color:#888;
-    line-height:1.5
+#key{
+font-size:22px;
+font-weight:800;
+min-height:48px;
+margin-bottom:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center
 }
 .code{
-    font-size:11px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.12);
-    padding:12px;
-    border-radius:8px;
-    word-break:break-all;
-    color:#ddd
+font-size:11px;
+font-family:ui-monospace,monospace;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.12);
+padding:12px;
+border-radius:8px;
+word-break:break-all
+}
+.msg{
+font-size:13px;
+color:#888
 }
 button{
-    width:100%;
-    padding:14px;
-    border-radius:8px;
-    border:none;
-    font-size:13px;
-    font-weight:700;
-    background:#fff;
-    color:#000;
-    cursor:pointer;
-    transition:.2s ease
+width:100%;
+padding:14px;
+border-radius:8px;
+border:none;
+font-size:13px;
+font-weight:700;
+background:#fff;
+color:#000;
+cursor:pointer
 }
-button:disabled{
-    opacity:.15;
-    cursor:not-allowed
-}
-.loading{
-    opacity:.35;
-    animation:pulse 1s infinite alternate
-}
-@keyframes pulse{
-    from{opacity:.25}
-    to{opacity:.55}
-}
-.discord-btn{
-    margin-top:18px;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:48px;
-    height:48px;
-    border-radius:12px;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.12);
-    cursor:pointer;
-    transition:.2s ease
-}
-.discord-btn:hover{
-    background:rgba(255,255,255,.12)
-}
-.discord-icon{
-    width:26px;
-    height:26px;
-    object-fit:contain;
-    pointer-events:none
-}
+button:disabled{opacity:.25}
 </style>
 </head>
 
 <body>
 
 <div class="card">
-    <div class="tabs">
-        <div class="tab active" id="tKey">Key</div>
-        <div class="tab" id="tScript">Script</div>
-        <div class="tab" id="tSupport">Support</div>
-    </div>
+<div class="tabs">
+<div class="tab active" data-tab="key">Key</div>
+<div class="tab" data-tab="script">Script</div>
+<div class="tab" data-tab="support">Support</div>
+</div>
 
-    <div id="keyView">
-        <div class="tag">Current Key</div>
-        <div id="key">Subscribe Required</div>
-        <button id="action">Subscribe to Continue</button>
-    </div>
+<div id="keyView">
+<div class="tag">Current Key</div>
+<div id="key">Subscribe Required</div>
+<button id="action">Subscribe to Continue</button>
+</div>
 
-    <div id="scriptView" style="display:none">
-        <div class="tag">Loadstring</div>
-        <div id="scriptBox">
-            <div class="code" id="script">
-loadstring(game:HttpGet("https://raw.githubusercontent.com/nismovxa/acro-hub/refs/heads/main/acro-main"))()
-            </div>
-        </div>
-        <button id="copyScript">Copy Script</button>
-    </div>
+<div id="scriptView" style="display:none">
+<div class="tag">Loadstring</div>
+<div class="code" id="script">
+loadstring(game:HttpGet("https://raw.githubusercontent.com/nismovxa/acro-hub/main/acro-main"))()
+</div>
+<button id="copyScript">Copy Script</button>
+</div>
 
-    <div id="supportView" style="display:none">
-        <div class="tag">Discord Support</div>
-        <div class="msg">
-            If the key fails to load or the script<br>
-            does not work as expected,<br>
-            join the Discord for help.
-        </div>
-        <div class="discord-btn"
-             onclick="window.open('https://discord.gg/V3p3S2PkZq','_blank','noopener')">
-            <img
-              src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/discord-white-icon.png"
-              alt="Discord"
-              class="discord-icon">
-        </div>
-    </div>
+<div id="supportView" style="display:none">
+<div class="tag">Discord Support</div>
+<div class="msg">Join Discord if issues persist.</div>
+<button onclick="window.open('https://discord.gg/V3p3S2PkZq','_blank')">
+Open Discord
+</button>
+</div>
 </div>
 
 <script>
-const tKey=document.getElementById("tKey")
-const tScript=document.getElementById("tScript")
-const tSupport=document.getElementById("tSupport")
-
-const keyView=document.getElementById("keyView")
-const scriptView=document.getElementById("scriptView")
-const supportView=document.getElementById("supportView")
-
-const show=v=>{
-    keyView.style.display=v==="key"?"block":"none"
-    scriptView.style.display=v==="script"?"block":"none"
-    supportView.style.display=v==="support"?"block":"none"
-    tKey.classList.toggle("active",v==="key")
-    tScript.classList.toggle("active",v==="script")
-    tSupport.classList.toggle("active",v==="support")
+const tabs=[...document.querySelectorAll(".tab")]
+const views={
+key:document.getElementById("keyView"),
+script:document.getElementById("scriptView"),
+support:document.getElementById("supportView")
 }
 
-tKey.onclick=()=>show("key")
-tScript.onclick=()=>show("script")
-tSupport.onclick=()=>show("support")
+tabs.forEach(t=>{
+t.onclick=()=>{
+tabs.forEach(x=>x.classList.remove("active"))
+t.classList.add("active")
+Object.values(views).forEach(v=>v.style.display="none")
+views[t.dataset.tab].style.display="block"
+}
+})
 
-document.getElementById("copyScript").onclick=async()=>{
-    await navigator.clipboard.writeText(
-        document.getElementById("script").innerText.trim()
-    )
+document.getElementById("copyScript").onclick=()=>{
+navigator.clipboard.writeText(
+document.getElementById("script").innerText.trim()
+)
 }
 
 const keyBox=document.getElementById("key")
 const btn=document.getElementById("action")
 
-const proxy="https://corsproxy.io/?"
-const yt="https://youtube.com/@acrosploit?si=BdlT18nDdVpTNUU8"
-
 const statusURL="https://pastebin.com/raw/BpcbtQmc"
 const keyURL="https://pastebin.com/raw/yG4r13Yd"
+const yt="https://youtube.com/@acrosploit"
+const proxy="https://api.allorigins.win/raw?url="
 
 let busy=false
-let verified=false
+let attempts=0
 
-const wrap=u=>{
-    const s=u.includes("?")?"&":"?"
-    return proxy+encodeURIComponent(u+s+"cb="+Date.now())
+const pull=u=>Promise.race([
+fetch(proxy+encodeURIComponent(u+"?t="+Date.now()),{cache:"no-store"}).then(r=>r.text()),
+new Promise((_,j)=>setTimeout(j,2500))
+]).then(t=>{
+t=t.trim()
+if(!t||t.includes("<html")) throw 0
+return t
+})
+
+btn.onclick=()=>{
+window.open(yt,"_blank")
+btn.textContent="I Subscribed"
+btn.onclick=load
 }
 
-async function grab(u){
-    const r=await fetch(wrap(u),{cache:"no-store"})
-    const t=(await r.text()).trim()
-    if(!t||t.includes("<html"))throw 0
-    return t
-}
+async function load(){
+if(busy) return
+busy=true
+btn.disabled=true
+keyBox.textContent="Connecting..."
 
-function loading(t){
-    keyBox.textContent=t
-    keyBox.classList.add("loading")
-    btn.textContent="Please wait"
-    btn.disabled=true
+try{
+const [s,k]=await Promise.all([pull(statusURL),pull(keyURL)])
+if(s.toLowerCase()==="disabled"){
+keyBox.textContent="Key system disabled"
+return
 }
-
-function clear(){
-    keyBox.classList.remove("loading")
+const key=k.replace(/KEY:\s*/i,"").trim()
+localStorage.setItem("last_key",key)
+keyBox.textContent=key
+btn.textContent="Copy Key"
+btn.disabled=false
+btn.onclick=()=>navigator.clipboard.writeText(key)
+attempts=0
+}catch{
+const cached=localStorage.getItem("last_key")
+if(cached){
+keyBox.textContent=cached
+btn.textContent="Copy Key"
+btn.disabled=false
+btn.onclick=()=>navigator.clipboard.writeText(cached)
+}else{
+attempts++
+if(attempts<3){
+setTimeout(load,1500)
+}else{
+keyBox.textContent="Temporarily unavailable"
+btn.textContent="Retry"
+btn.disabled=false
+btn.onclick=load
 }
-
-function gate(){
-    keyBox.innerHTML='<div class="msg">Subscribe to the official AcroSploit channel.</div>'
-    btn.textContent="Subscribe to Continue"
-    btn.disabled=false
-    btn.onclick=()=>{
-        window.open(yt,"_blank","noopener")
-        btn.textContent="I Subscribed"
-        btn.onclick=()=>{
-            verified=true
-            fetchKey()
-        }
-    }
 }
-
-async function fetchKey(){
-    if(busy||!verified)return
-    busy=true
-    loading("Connecting...")
-    try{
-        const s=(await grab(statusURL)).toLowerCase()
-        if(s==="disabled"){
-            clear()
-            keyBox.innerHTML='<div class="msg">Key system disabled.</div>'
-            btn.disabled=true
-            busy=false
-            return
-        }
-        const raw=await grab(keyURL)
-        const key=raw.replace(/KEY:\s*/i,"").trim()
-        clear()
-        keyBox.textContent=key
-        btn.textContent="Copy Key"
-        btn.disabled=false
-        btn.onclick=async()=>{
-            await navigator.clipboard.writeText(key)
-        }
-        busy=false
-    }catch{
-        clear()
-        keyBox.innerHTML='<div class="msg">Connection failed. Use Support tab.</div>'
-        btn.textContent="Retry"
-        btn.disabled=false
-        btn.onclick=fetchKey
-        busy=false
-    }
 }
-
-gate()
+busy=false
+}
 </script>
 
 </body>
