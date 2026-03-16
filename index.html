@@ -103,8 +103,8 @@ button:disabled{opacity:.25}
 
 <div id="keyView">
 <div class="tag">Current Key</div>
-<div id="key">Subscribe Required</div>
-<button id="action">Subscribe to Continue</button>
+<div id="key">Click below to get your key</div>
+<button id="action">Get Key</button>
 </div>
 
 <div id="scriptView" style="display:none">
@@ -147,71 +147,11 @@ document.getElementById("script").innerText.trim()
 )
 }
 
-const keyBox=document.getElementById("key")
+const keyURL="https://raw.githubusercontent.com/acroscripts/DKEY/refs/heads/main/Current"
 const btn=document.getElementById("action")
 
-const statusURL="https://pastebin.com/raw/BpcbtQmc"
-const keyURL="https://raw.githubusercontent.com/acroscripts/DKEY/refs/heads/main/Current"
-const yt="https://youtube.com/@acrosploit"
-const proxy="https://api.allorigins.win/raw?url="
-
-let busy=false
-let attempts=0
-
-const pull=u=>Promise.race([
-fetch(proxy+encodeURIComponent(u+"?t="+Date.now()),{cache:"no-store"}).then(r=>r.text()),
-new Promise((_,j)=>setTimeout(j,2500))
-]).then(t=>{
-t=t.trim()
-if(!t||t.includes("<html")) throw 0
-return t
-})
-
 btn.onclick=()=>{
-window.open(yt,"_blank")
-btn.textContent="I Subscribed"
-btn.onclick=load
-}
-
-async function load(){
-if(busy) return
-busy=true
-btn.disabled=true
-keyBox.textContent="Connecting..."
-
-try{
-const [s,k]=await Promise.all([pull(statusURL),pull(keyURL)])
-if(s.toLowerCase()==="disabled"){
-keyBox.textContent="Key system disabled"
-return
-}
-const key=k.replace(/KEY:\s*/i,"").trim()
-localStorage.setItem("last_key",key)
-keyBox.textContent=key
-btn.textContent="Copy Key"
-btn.disabled=false
-btn.onclick=()=>navigator.clipboard.writeText(key)
-attempts=0
-}catch{
-const cached=localStorage.getItem("last_key")
-if(cached){
-keyBox.textContent=cached
-btn.textContent="Copy Key"
-btn.disabled=false
-btn.onclick=()=>navigator.clipboard.writeText(cached)
-}else{
-attempts++
-if(attempts<3){
-setTimeout(load,1500)
-}else{
-keyBox.textContent="Temporarily unavailable"
-btn.textContent="Retry"
-btn.disabled=false
-btn.onclick=load
-}
-}
-}
-busy=false
+window.open(keyURL,"_blank")
 }
 </script>
 
