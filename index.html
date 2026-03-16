@@ -103,8 +103,16 @@ button:disabled{opacity:.25}
 
 <div id="keyView">
 <div class="tag">Current Key</div>
-<div id="key">Click below to get your key</div>
-<button id="action">Get Key</button>
+<div id="key">Subscribe to get your key</div>
+<div id="subStep">
+<button id="subBtn" style="background:#ff0000;color:#fff;margin-bottom:10px">
+Subscribe on YouTube
+</button>
+<div id="subTimer" style="font-size:11px;color:#555;margin-bottom:10px;display:none">
+Please wait <span id="countdown">15</span>s...
+</div>
+</div>
+<button id="action" disabled>Get Key</button>
 </div>
 
 <div id="scriptView" style="display:none">
@@ -149,6 +157,30 @@ document.getElementById("script").innerText.trim()
 
 const keyURL="https://raw.githubusercontent.com/acroscripts/DKEY/refs/heads/main/Current"
 const btn=document.getElementById("action")
+const subBtn=document.getElementById("subBtn")
+const subTimer=document.getElementById("subTimer")
+const countdownEl=document.getElementById("countdown")
+const ytURL="https://www.youtube.com/@ACROSPLOIT?sub_confirmation=1"
+
+subBtn.onclick=()=>{
+window.open(ytURL,"_blank")
+subBtn.disabled=true
+subBtn.style.opacity=".5"
+subBtn.textContent="Subscribed?"
+subTimer.style.display="block"
+let sec=15
+const iv=setInterval(()=>{
+sec--
+countdownEl.textContent=sec
+if(sec<=0){
+clearInterval(iv)
+subTimer.style.display="none"
+subBtn.style.display="none"
+btn.disabled=false
+document.getElementById("key").textContent="Click below to get your key"
+}
+},1000)
+}
 
 btn.onclick=()=>{
 window.open(keyURL,"_blank")
