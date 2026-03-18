@@ -115,10 +115,10 @@ Please wait <span id="ytCountdown">15</span>s...
 </div>
 
 <button id="groupBtn" style="background:#00a2ff;color:#fff;margin-bottom:10px">
-Join Roblox Group
+Register On Panda Development
 </button>
 <div id="groupTimer" style="font-size:11px;color:#555;margin-bottom:10px;display:none">
-Please wait <span id="groupCountdown">10</span>s...
+Please wait <span id="groupCountdown">60</span>s...
 </div>
 
 </div>
@@ -178,7 +178,7 @@ const groupTimer=document.getElementById("groupTimer")
 const groupCountdownEl=document.getElementById("groupCountdown")
 
 const ytURL="https://www.youtube.com/@ACROSPLOIT?sub_confirmation=1"
-const groupURL="https://www.roblox.com/groups/872405600"
+const groupURL="https://new.pandadevelopment.net/register?ref=3C05F235"
 
 let ytDone=false
 let groupDone=false
@@ -215,7 +215,7 @@ groupBtn.onclick=()=>{
 window.open(groupURL,"_blank")
 groupBtn.disabled=true
 groupBtn.style.opacity=".5"
-groupBtn.textContent="Joined?"
+groupBtn.textContent="Registered?"
 groupTimer.style.display="block"
 
 let sec=10
