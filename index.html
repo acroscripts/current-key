@@ -232,8 +232,32 @@ checkUnlock()
 },1000)
 }
 
+btn.onclick=async()=>{
+btn.disabled=true
+btn.textContent="Loading..."
+
+try{
+const res=await fetch(keyURL+"?t="+Date.now())
+const text=await res.text()
+
+let key=text.trim()
+if(key.includes("KEY:")){
+key=key.split("KEY:")[1].trim()
+}
+
+document.getElementById("key").textContent=key
+btn.textContent="Copy Key"
+
 btn.onclick=()=>{
-window.open(keyURL,"_blank")
+navigator.clipboard.writeText(key)
+btn.textContent="Copied!"
+}
+
+}catch(e){
+document.getElementById("key").textContent="Failed to load key"
+btn.textContent="Retry"
+btn.disabled=false
+}
 }
 </script>
 
