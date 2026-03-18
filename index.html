@@ -103,15 +103,26 @@ button:disabled{opacity:.25}
 
 <div id="keyView">
 <div class="tag">Current Key</div>
-<div id="key">Subscribe to get your key</div>
-<div id="subStep">
-<button id="subBtn" style="background:#ff0000;color:#fff;margin-bottom:10px">
+<div id="key">Complete tasks to get your key</div>
+
+<div id="tasks">
+
+<button id="ytBtn" style="background:#ff0000;color:#fff;margin-bottom:10px">
 Subscribe on YouTube
 </button>
-<div id="subTimer" style="font-size:11px;color:#555;margin-bottom:10px;display:none">
-Please wait <span id="countdown">15</span>s...
+<div id="ytTimer" style="font-size:11px;color:#555;margin-bottom:10px;display:none">
+Please wait <span id="ytCountdown">15</span>s...
 </div>
+
+<button id="groupBtn" style="background:#00a2ff;color:#fff;margin-bottom:10px">
+Join Roblox Group
+</button>
+<div id="groupTimer" style="font-size:11px;color:#555;margin-bottom:10px;display:none">
+Please wait <span id="groupCountdown">10</span>s...
 </div>
+
+</div>
+
 <button id="action" disabled>Get Key</button>
 </div>
 
@@ -157,27 +168,66 @@ document.getElementById("script").innerText.trim()
 
 const keyURL="https://raw.githubusercontent.com/acroscripts/DKEY/refs/heads/main/Current"
 const btn=document.getElementById("action")
-const subBtn=document.getElementById("subBtn")
-const subTimer=document.getElementById("subTimer")
-const countdownEl=document.getElementById("countdown")
-const ytURL="https://www.youtube.com/@ACROSPLOIT?sub_confirmation=1"
 
-subBtn.onclick=()=>{
+const ytBtn=document.getElementById("ytBtn")
+const ytTimer=document.getElementById("ytTimer")
+const ytCountdownEl=document.getElementById("ytCountdown")
+
+const groupBtn=document.getElementById("groupBtn")
+const groupTimer=document.getElementById("groupTimer")
+const groupCountdownEl=document.getElementById("groupCountdown")
+
+const ytURL="https://www.youtube.com/@ACROSPLOIT?sub_confirmation=1"
+const groupURL="https://www.roblox.com/groups/872405600"
+
+let ytDone=false
+let groupDone=false
+
+function checkUnlock(){
+if(ytDone && groupDone){
+btn.disabled=false
+document.getElementById("key").textContent="Click below to get your key"
+}
+}
+
+ytBtn.onclick=()=>{
 window.open(ytURL,"_blank")
-subBtn.disabled=true
-subBtn.style.opacity=".5"
-subBtn.textContent="Subscribed?"
-subTimer.style.display="block"
+ytBtn.disabled=true
+ytBtn.style.opacity=".5"
+ytBtn.textContent="Subscribed?"
+ytTimer.style.display="block"
+
 let sec=15
 const iv=setInterval(()=>{
 sec--
-countdownEl.textContent=sec
+ytCountdownEl.textContent=sec
 if(sec<=0){
 clearInterval(iv)
-subTimer.style.display="none"
-subBtn.style.display="none"
-btn.disabled=false
-document.getElementById("key").textContent="Click below to get your key"
+ytTimer.style.display="none"
+ytBtn.style.display="none"
+ytDone=true
+checkUnlock()
+}
+},1000)
+}
+
+groupBtn.onclick=()=>{
+window.open(groupURL,"_blank")
+groupBtn.disabled=true
+groupBtn.style.opacity=".5"
+groupBtn.textContent="Joined?"
+groupTimer.style.display="block"
+
+let sec=10
+const iv=setInterval(()=>{
+sec--
+groupCountdownEl.textContent=sec
+if(sec<=0){
+clearInterval(iv)
+groupTimer.style.display="none"
+groupBtn.style.display="none"
+groupDone=true
+checkUnlock()
 }
 },1000)
 }
